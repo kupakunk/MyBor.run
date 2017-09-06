@@ -266,26 +266,21 @@ Func chkmakeIMGCSV()
 EndFunc   ;==>chkmakeIMGCSV
 
 Func btnTestTrain()
-	Local $currentOCR = $g_iDebugOcr
 	Local $currentRunState = $g_bRunState
 	$g_bRunState = True
-	BeginImageTest()
 
-	Local $result
-	SetLog("Testing checkArmyCamp()", $COLOR_INFO)
-	$result = checkArmyCamp()
-	If @error Then $result = "Error " & @error & ", " & @extended & ", " & ((IsArray($result)) ? (_ArrayToString($result, ",")) : ($result))
-	SetLog("Result checkArmyCamp() = " & $result, $COLOR_INFO)
+	_GUICtrlTab_ClickTab($g_hTabMain, 0)
+	SetLog("===START===")
+	Local $hTimer = __TimerInit()
 
-	SetLog("Testing getArmyHeroTime()", $COLOR_INFO)
-	$result = getArmyHeroTime("all")
-	If @error Then $result = "Error " & @error & ", " & @extended & ", " & ((IsArray($result)) ? (_ArrayToString($result, ",")) : ($result))
-	SetLog("Result getArmyHeroTime() = " & $result, $COLOR_INFO)
-	SetLog("Testing Train DONE", $COLOR_INFO)
+	$g_bRestart = False
+	$tempDisableTrain=False
+	$tempDisableBrewSpell=False
+    ModTrain()
 
-	EndImageTest()
+	SetLog("Elapsed: " & Round(__TimerDiff($hTimer) / 1000, 2))
+	SetLog("===END===")
 
-	$g_iDebugOcr = $currentOCR
 	$g_bRunState = $currentRunState
 EndFunc   ;==>btnTestTrain
 

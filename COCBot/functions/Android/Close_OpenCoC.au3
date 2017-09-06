@@ -66,12 +66,15 @@ Func OpenCoC()
 	If _Sleep(500) Then Return
 	If Not StartAndroidCoC() Then Return
 	If Not $g_bRunState Then Return
-	While _CheckPixel($aIsMain, True) = False ; Wait for MainScreen
-		$iCount += 1
-		If _Sleep(100) Then Return
-		If checkObstacles() Then $iCount += 1
-		If $iCount > 250 Then ExitLoop
-	WEnd
+
+	; samm0d
+	Wait4Main()
+;~ 	While _CheckPixel($aIsMain, True) = False ; Wait for MainScreen
+;~ 		$iCount += 1
+;~ 		If _Sleep(100) Then Return
+;~ 		If checkObstacles() Then $iCount += 1
+;~ 		If $iCount > 250 Then ExitLoop
+;~ 	WEnd
 
 EndFunc   ;==>OpenCoC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -221,6 +224,25 @@ Func PoliteCloseCoC($sSource = "Unknown_")
 			EndIf
 			$i += 1
 		WEnd
+	EndIf
+
+	; samm0d - wait game fully close within 3 seconds
+	$g_iAndroidCoCPid = GetAndroidProcessPID(Default, False)
+	If $g_iSamM0dDebug = 1 Then SetLog("$g_iAndroidCoCPid: " & $g_iAndroidCoCPid)
+	Local $iCount = 0
+	While $g_iAndroidCoCPid <> 0
+		$g_iAndroidCoCPid = GetAndroidProcessPID(Default, False)
+		If $g_iSamM0dDebug = 1 Then SetLog("$g_iAndroidCoCPid: " & $g_iAndroidCoCPid)
+		$iCount += 1
+		If $iCount > 12 Then ExitLoop
+		If _Sleep(250) Then Return False
+	WEnd
+	If $iCount > 12 Then
+		ResumeAndroid()
+		If Not $g_bRunState Then Return
+		WinGetAndroidHandle()
+		If Not $g_bRunState Then Return
+		AndroidAdbSendShellCommand("am force-stop " & $g_sAndroidGamePackage, Default, Default, False)
 	EndIf
 	ResetAndroidProcess()
 	ReduceBotMemory()
