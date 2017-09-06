@@ -586,9 +586,9 @@ EndFunc
 ;~ 	EndIf
 ;~ EndFunc
 
-Func chkDisablePauseTrayTip()
-	$ichkDisablePauseTrayTip = (GUICtrlRead($chkDisablePauseTrayTip) = $GUI_CHECKED ? 1 : 0)
-EndFunc
+;~ Func chkDisablePauseTrayTip()
+;~ 	$ichkDisablePauseTrayTip = (GUICtrlRead($chkDisablePauseTrayTip) = $GUI_CHECKED ? 1 : 0)
+;~ EndFunc
 
 Func chkEnableLogoutLimit()
 	$ichkEnableLogoutLimit = (GUICtrlRead($chkEnableLogoutLimit) = $GUI_CHECKED ? 1 : 0)

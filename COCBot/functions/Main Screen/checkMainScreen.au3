@@ -67,7 +67,7 @@ Func checkMainScreen($bSetLog = True, $bBuilderBase = False) ;Checks if in main 
 		EndIf
 	WEnd
 	ZoomOut()
-	If Not $bBuilderBase Then
+	If $bBuilderBase = False Then
 		If isOnBuilderIsland(False) Then
 			SwitchBetweenBases()
 		EndIf
